@@ -112,6 +112,10 @@ with lib;
         vim.loader.enable()
         -- prepend lua directory
         vim.opt.rtp:prepend('${nvimRtp}/lua')
+        -- set variables that depend on nix so that they can be used later in plugins configuration
+        vim.api.nvim_set_var('nix_dependant_configs', {
+          metals_path = '${pkgs.metals}/bin/metals',
+        })
       ''
       # Wrap init.lua
       + (builtins.readFile ../nvim/init.lua)
