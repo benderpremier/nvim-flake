@@ -9,12 +9,12 @@ local actions = require('telescope.actions')
 local builtin = require('telescope.builtin')
 
 local layout_config = {
-  vertical = {
+  horizontal = {
     width = function(_, max_columns)
-      return math.floor(max_columns * 0.99)
+      return math.floor(max_columns * 0.9)
     end,
     height = function(_, _, max_lines)
-      return math.floor(max_lines * 0.99)
+      return math.floor(max_lines * 0.9)
     end,
     prompt_position = 'bottom',
     preview_cutoff = 0,
@@ -69,11 +69,13 @@ local function fuzzy_grep_current_file_type()
   grep_current_file_type(fuzzy_grep)
 end
 
-vim.keymap.set('n', '<leader>tp', function()
+vim.keymap.set('n', '<leader>ff', function()
   builtin.find_files()
 end, { desc = '[t]elescope find files - ctrl[p] style' })
-vim.keymap.set('n', '<M-p>', builtin.oldfiles, { desc = '[telescope] old files' })
-vim.keymap.set('n', '<C-g>', builtin.live_grep, { desc = '[telescope] live grep' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = '[telescope] live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[t]elescope [b]uffers [b]' })
+vim.keymap.set('n', '<leader>f*', builtin.grep_string, { desc = '[telescope] grep current string [*]' })
+vim.keymap.set('n', '<keader>fo', builtin.oldfiles, { desc = '[telescope] old files' })
 vim.keymap.set('n', '<leader>tf', fuzzy_grep, { desc = '[t]elescope [f]uzzy grep' })
 vim.keymap.set('n', '<M-f>', fuzzy_grep_current_file_type, { desc = '[telescope] fuzzy grep filetype' })
 vim.keymap.set('n', '<M-g>', live_grep_current_file_type, { desc = '[telescope] live grep filetype' })
@@ -83,13 +85,11 @@ vim.keymap.set(
   grep_string_current_file_type,
   { desc = '[t]elescope grep current string [*] in current filetype' }
 )
-vim.keymap.set('n', '<leader>*', builtin.grep_string, { desc = '[telescope] grep current string [*]' })
 vim.keymap.set('n', '<leader>tg', project_files, { desc = '[t]elescope project files [g]' })
 vim.keymap.set('n', '<leader>tc', builtin.quickfix, { desc = '[t]elescope quickfix list [c]' })
 vim.keymap.set('n', '<leader>tq', builtin.command_history, { desc = '[t]elescope command history [q]' })
 vim.keymap.set('n', '<leader>tl', builtin.loclist, { desc = '[t]elescope [l]oclist' })
 vim.keymap.set('n', '<leader>tr', builtin.registers, { desc = '[t]elescope [r]egisters' })
-vim.keymap.set('n', '<leader>tbb', builtin.buffers, { desc = '[t]elescope [b]uffers [b]' })
 vim.keymap.set(
   'n',
   '<leader>tbf',
@@ -109,7 +109,7 @@ telescope.setup {
     path_display = {
       'truncate',
     },
-    layout_strategy = 'vertical',
+    layout_strategy = 'horizontal',
     layout_config = layout_config,
     mappings = {
       i = {

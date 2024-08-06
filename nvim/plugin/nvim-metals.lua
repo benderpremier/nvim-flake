@@ -6,6 +6,10 @@ metals_config.settings = {
   excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
   metalsBinaryPath = vim.api.nvim_get_var('nix_dependant_configs').metals_path
 }
+-- dap
+metals_config.on_attach = function(client, bufnr)
+  require("metals").setup_dap()
+end
 
 local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {

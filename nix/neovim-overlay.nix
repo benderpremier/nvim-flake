@@ -84,6 +84,7 @@ with final.pkgs.lib; let
     which-key-nvim
     # scala
     nvim-metals
+    nvim-dap
   ];
 
   extraPackages = with pkgs; [
@@ -91,6 +92,7 @@ with final.pkgs.lib; let
     lua-language-server
     nil # nix LSP
     metals #scala
+    ripgrep
   ];
 in {
   # This is the neovim derivation
