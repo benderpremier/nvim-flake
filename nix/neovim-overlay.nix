@@ -88,6 +88,9 @@ with final.pkgs.lib; let
     # scala
     nvim-metals
     nvim-dap
+    nvim-nio
+    nvim-dap-ui
+    nvim-dap-virtual-text
   ];
 
   extraPackages = with pkgs; [
