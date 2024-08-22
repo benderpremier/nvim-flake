@@ -12,6 +12,10 @@
     #   url = "github:Cassin01/wf.nvim";
     #   flake = false;
     # };
+     eyeliner = {
+       url = "github:jinh0/eyeliner.nvim";
+       flake = false;
+     };
   };
 
   outputs = inputs @ {
