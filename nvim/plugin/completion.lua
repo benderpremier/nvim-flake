@@ -25,6 +25,10 @@ local function complete_with_source(source)
 end
 
 cmp.setup {
+   window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
   completion = {
     completeopt = 'menu,menuone,noinsert',
     -- autocomplete = false,
@@ -97,7 +101,7 @@ cmp.setup {
         cmp.complete()
       end
     end, { 'i', 'c', 's' }),
-    ['<C-y>'] = cmp.mapping.confirm {
+    ['<CR>'] = cmp.mapping.confirm {
       select = true,
     },
   },
