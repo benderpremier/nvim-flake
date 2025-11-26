@@ -17,6 +17,18 @@ with final.pkgs.lib; let
   # This is the helper function that builds the Neovim derivation.
   mkNeovim = pkgs.callPackage ./mkNeovim.nix { inherit pkgs-wrapNeovim; };
 
+  # Override lualine to build directly from source (bypass luarocks hash issue)
+  lualine-fixed = pkgs.vimUtils.buildVimPlugin {
+    pname = "lualine.nvim";
+    version = "2025-11-26";
+    src = pkgs.fetchFromGitHub {
+      owner = "nvim-lualine";
+      repo = "lualine.nvim";
+      rev = "47f91c416daef12db467145e16bed5bbfe00add8";  # Latest commit as of 2025-11-26
+      sha256 = "sha256-OpLZH+sL5cj2rcP5/T+jDOnuxd1QWLHCt2RzloffZOA=";
+    };
+  };
+
   # A plugin can either be a package or an attrset, such as
   # { plugin = <plugin>; # the package, e.g. pkgs.vimPlugins.nvim-cmp
   #   config = <config>; # String; a config that will be loaded with the plugin
@@ -56,7 +68,7 @@ with final.pkgs.lib; let
     # ^ telescope and extensions
     # UI
     gruvbox-nvim # gruvbox-nvim https://github.com/ellisonleao/gruvbox.nvim/
-    lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
+    lualine-fixed # Status line | https://github.com/nvim-lualine/lualine.nvim/ (using fixed version to avoid hash mismatch)
     nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic
     statuscol-nvim # Status column | https://github.com/luukvbaal/statuscol.nvim/
     nvim-treesitter-context # nvim-treesitter-context
