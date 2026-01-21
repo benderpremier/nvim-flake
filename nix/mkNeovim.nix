@@ -110,8 +110,15 @@ with lib;
     initLua =
       ''
         vim.loader.enable()
+
+        -- Check for dev config mode: if NVIM_DEV_CONFIG is set, use that path instead of Nix store
+        local dev_config = vim.env.NVIM_DEV_CONFIG
+        local lua_path = dev_config and (dev_config .. '/lua') or '${nvimRtp}/lua'
+        local nvim_path = dev_config and dev_config or '${nvimRtp}/nvim'
+        local after_path = dev_config and (dev_config .. '/after') or '${nvimRtp}/after'
+
         -- prepend lua directory
-        vim.opt.rtp:prepend('${nvimRtp}/lua')
+        vim.opt.rtp:prepend(lua_path)
         -- set variables that depend on nix so that they can be used later in plugins configuration
         vim.api.nvim_set_var('nix_dependant_configs', {
           metals_path = '${pkgs.metals}/bin/metals',
@@ -140,8 +147,8 @@ with lib;
       )
       # Append nvim and after directories to the runtimepath
       + ''
-        vim.opt.rtp:append('${nvimRtp}/nvim')
-        vim.opt.rtp:append('${nvimRtp}/after')
+        vim.opt.rtp:append(nvim_path)
+        vim.opt.rtp:append(after_path)
       '';
 
     # Add arguments to the Neovim wrapper script

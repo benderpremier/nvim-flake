@@ -261,7 +261,46 @@ git merge upstream/main --allow-unrelated-histories
 
 When your neovim setup is a nix derivation, editing your config
 demands a different workflow than you are used to without nix.
-Here is how I usually do it:
+
+### Development mode (recommended)
+
+This flake supports a **development mode** that lets you edit your Lua configuration
+without rebuilding the Nix derivation. Set the `NVIM_DEV_CONFIG` environment variable
+to point to the `nvim` directory in your repo:
+
+```bash
+# Add to your shell config (.bashrc, .zshrc, etc.)
+export NVIM_DEV_CONFIG="/path/to/your/nvim-flake/nvim"
+```
+
+With this set:
+- Plugins are still loaded from the Nix store (managed by Nix)
+- Lua configuration is loaded from your repo directory (mutable)
+- Changes take effect immediately when you restart Neovim
+
+#### Workflow
+
+1. **Edit config files** in `nvim/plugin/`, `nvim/ftplugin/`, etc.
+2. **Restart Neovim** to see changes (no rebuild needed)
+3. **Commit changes** when you're happy with them
+4. **Rebuild** only when you modify plugins or dependencies in `nix/`
+
+```bash
+# Example workflow
+vim ~/Code/nvim-flake/nvim/plugin/telescope.lua  # Edit config
+nvim                                              # Restart - changes are live!
+cd ~/Code/nvim-flake && git commit -am "update telescope config"
+```
+
+To switch back to the immutable Nix store config (e.g., for a "stable" setup):
+
+```bash
+unset NVIM_DEV_CONFIG
+```
+
+### Pure mode (rebuild each time)
+
+If you prefer a pure workflow where config is always loaded from the Nix store:
 
 - Perform modifications and stage any new files[^2].
 - Run `nix run /path/to/neovim/#nvim`
@@ -272,25 +311,6 @@ Here is how I usually do it:
 
 This requires a rebuild of the `nvim` derivation, but has the advantage
 that if anything breaks, it's only broken during your test run.
-
-If you want an impure, but faster feedback loop,
-you can use `$XDG_CONFIG_HOME/$NVIM_APPNAME`[^3], where `$NVIM_APPNAME` 
-defaults to `nvim` if the `appName` attribute is not set 
-in the `mkNeovim` function.
-
-[^3]: Assuming Linux. Refer to `:h initialization` for Darwin.
-
-This has one caveat: The wrapper which nix generates for the derivation
-calls `nvim` with `-u /nix/store/path/to/generated-init.lua`.
-So it won't source a local `init.lua` file.
-To work around this, you can put scripts in the `plugin` or `after/plugin` directory.
-
-> [!TIP]
->
-> If you are starting out, and want to test things without having to
-> stage or commit new files for changes to take effect,
-> you can remove the `.git` directory and re-initialize it (`git init`)
-> when you are done.
 
 ## :link: Alternative / similar projects
 
