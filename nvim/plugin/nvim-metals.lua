@@ -6,7 +6,7 @@ metals_config.settings = {
   excludedPackages = { "akka.actor.typed.javadsl", "com.github.swagger.akka.javadsl" },
   metalsBinaryPath = vim.api.nvim_get_var('nix_dependant_configs').metals_path,
   -- Re-import the build (e.g. sbt bloopInstall) automatically when build files change
-  autoImportBuild = "all",
+  automaticImportBuild = "all",
 }
 -- dap
 metals_config.on_attach = function(client, bufnr)
